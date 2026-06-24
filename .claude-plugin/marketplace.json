@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "project-routines",
-  "description": "A marketplace of custom Claude Code plugins for project routines and developer workflows",
+  "description": "Common personal product and engineering routines, packaged as Claude Code plugins and skills — run on demand or wired up to scheduled automation and triggers",
   "owner": {
     "name": "Tracy Chen",
     "email": "hi@tracy.fyi"
