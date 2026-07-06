@@ -9,11 +9,19 @@ project-routines/
 ├── .claude-plugin/
 │   └── marketplace.json          # Marketplace manifest listing every plugin
 ├── plugins/
-│   └── code-simplifier/          # One directory per plugin
+│   ├── code-simplifier/          # One directory per plugin
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json       # Plugin manifest (name, version, author)
+│   │   └── agents/
+│   │       └── code-simplifier.md  # Subagent definition
+│   └── retro/
 │       ├── .claude-plugin/
-│       │   └── plugin.json       # Plugin manifest (name, version, author)
-│       └── agents/
-│           └── code-simplifier.md  # Subagent definition
+│       │   └── plugin.json
+│       └── skills/
+│           └── retro/
+│               └── SKILL.md      # Skill definition
+├── docs/
+│   └── AUTHORING.md              # Conventions every routine follows
 └── README.md
 ```
 
@@ -24,6 +32,7 @@ A plugin can bundle any mix of components: `agents/` (subagents), `skills/` or `
 | Name | Type | Category | Description |
 | --- | --- | --- | --- |
 | `code-simplifier` | Plugin (agent) | productivity | Simplifies and refines recently modified code for clarity, consistency, and maintainability while preserving functionality — removing AI-generated slop and over-engineering, deferring to existing project conventions. |
+| `retro` | Plugin (skill) | productivity | Weekly engineering retrospective: a read-only, schedulable review of shipping cadence, test health, and progress that ends in 1–3 concrete next-week improvements. |
 
 ## Installation
 
@@ -65,6 +74,8 @@ Design each plugin to be safe to run unattended: a deterministic scope, no destr
    `plugins` array with a `"source": "./plugins/<name>"`.
 4. If it's meant to run automatically, document its trigger (a hook event or a
    schedule) in the plugin's description so installers know how to wire it up.
+
+See [`docs/AUTHORING.md`](docs/AUTHORING.md) for the conventions every routine in this marketplace follows.
 
 ## License
 
