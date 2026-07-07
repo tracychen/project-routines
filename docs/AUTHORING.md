@@ -27,8 +27,8 @@ Reusable techniques for building reliable routines:
 
 A plugin can bundle any mix of these. Pick the lightest one that fits:
 
-- **Skill** (`skills/<name>/SKILL.md`) — a model-invocable routine triggered by its description or run as `/<plugin>:<name>`, able to carry supporting files. Best for methodologies and multi-step workflows, and the default here (e.g. `code-simplifier`, `retro`).
-- **Agent** (`agents/<name>.md`) — a specialized worker Claude delegates to in its own context; invoked with `@agent-<plugin>:<name>` or by naming it in a prompt. Best for a focused, tool-restricted job that should run in an isolated context.
+- **Skill** (`skills/<name>/SKILL.md`) — a model-invocable routine triggered by its description or run as `/<plugin>:<name>`, able to carry supporting files. Best for methodologies and multi-step workflows (e.g. `retro`).
+- **Agent** (`agents/<name>.md`) — a specialized worker Claude delegates to in its own context; invoked with `@agent-<plugin>:<name>` or by naming it in a prompt. Best for a focused, tool-restricted job, an isolated context, or **persistent memory** across runs via the `memory` frontmatter field (e.g. `code-simplifier`, which remembers the last commit it processed).
 - **Command** (`commands/<name>.md`) — a thin, deterministic slash command. Best for a simple, fixed action.
 - **Hook** (`hooks/`) — an event trigger; use it to run a routine automatically on a Claude Code event.
 

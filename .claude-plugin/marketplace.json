@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "routines",
-      "description": "A suite of engineering routines you run on demand or on a schedule — a code-simplification pass (/routines:code-simplifier) and a weekly retrospective (/routines:retro).",
+      "description": "A suite of engineering routines — a memory-backed code-simplifier agent (@agent-routines:code-simplifier) and a weekly retrospective skill (/routines:retro), run on demand or on a schedule.",
       "author": {
         "name": "Tracy Chen",
         "email": "hi@tracy.fyi"
