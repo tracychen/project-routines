@@ -12,12 +12,23 @@ Conventions every plugin in this marketplace follows. A *routine* is a plugin th
 6. **Don't guess — the Confusion Protocol.** On an ambiguous architectural or intent question, stop and ask rather than assume. A wrong guess compounds downstream.
 7. **Safe to run unattended.** Routines can be wired to schedules or triggers, so design for it: deterministic scope, no destructive defaults, read-only where possible, and clear output. State plainly whether the routine edits code.
 
+## Craft patterns
+
+Reusable techniques for building reliable routines:
+
+- **Circuit breaker.** Bound retries. If a routine can't make progress after a few attempts (e.g. 3 failed fixes), stop and report rather than thrash. Corollary: no fixes without investigation.
+- **Preview by default.** Any routine that changes things should be able to show its plan before acting. Make dry-run the default for unattended runs, and require an explicit go-ahead to mutate.
+- **Plan-vs-outcome boomerang.** When a routine estimates something (scores, effort, risk), pair it with a later routine that measures the real outcome and diffs the two, so reality checks the plan.
+- **Independent second opinion.** For high-stakes review, verify with a separate pass — ideally a different model — and surface where the two agree versus diverge.
+- **Zero-noise with an exclusion list.** Reviews and audits should carry an explicit list of known false positives to suppress, plus a confidence threshold, so output stays high-signal.
+- **Diataxis for docs.** If a routine writes documentation, sort it into the four Diataxis modes — reference, how-to, tutorial, explanation — and track coverage so gaps are visible.
+
 ## Choosing a component type
 
 A plugin can bundle any mix of these. Pick the lightest one that fits:
 
-- **Agent** (`agents/<name>.md`) — a specialized worker Claude delegates to in its own context; invoked with `@agent-<plugin>:<name>` or by naming it in a prompt. Best for a focused, tool-restricted job (e.g. `code-simplifier`).
-- **Skill** (`skills/<name>/SKILL.md`) — a model-invocable routine triggered by its description or as `/<name>`, able to carry supporting files. Best for methodologies and multi-step workflows (e.g. `retro`).
+- **Skill** (`skills/<name>/SKILL.md`) — a model-invocable routine triggered by its description or run as `/<plugin>:<name>`, able to carry supporting files. Best for methodologies and multi-step workflows, and the default here (e.g. `code-simplifier`, `retro`).
+- **Agent** (`agents/<name>.md`) — a specialized worker Claude delegates to in its own context; invoked with `@agent-<plugin>:<name>` or by naming it in a prompt. Best for a focused, tool-restricted job that should run in an isolated context.
 - **Command** (`commands/<name>.md`) — a thin, deterministic slash command. Best for a simple, fixed action.
 - **Hook** (`hooks/`) — an event trigger; use it to run a routine automatically on a Claude Code event.
 

@@ -1,9 +1,0 @@
-{
-  "name": "code-simplifier",
-  "version": "1.0.0",
-  "description": "Agent that simplifies and refines code for clarity, consistency, and maintainability while preserving functionality. Removes AI-generated slop, redundancy, and over-engineering; defers to existing project conventions.",
-  "author": {
-    "name": "Tracy Chen",
-    "email": "hi@tracy.fyi"
-  }
-}

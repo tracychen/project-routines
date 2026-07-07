@@ -1,0 +1,9 @@
+{
+  "name": "routines",
+  "version": "1.0.0",
+  "description": "A suite of engineering routines you run on demand or on a schedule — currently a code-simplification pass and a weekly retrospective",
+  "author": {
+    "name": "Tracy Chen",
+    "email": "hi@tracy.fyi"
+  }
+}
