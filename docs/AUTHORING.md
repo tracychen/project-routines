@@ -45,6 +45,21 @@ State the trigger explicitly:
 
 Design the routine to produce the same result whether a human or a scheduler runs it, and to degrade to flag-only — no structural changes — when unattended.
 
+## Running unattended safely
+
+A routine that edits and runs without a human should follow a propose-don't-dispose contract:
+
+- **Propose via PR; a human merges.** Never merge or push to a protected branch from an unattended run. Open a scoped PR (e.g. from a `<routine>/<date>` branch), hand off with a notification and a disposition label (`ready` / `needs-manual-review`).
+- **Enforce invariants in code, not just the prompt.** If a routine must only touch a class of files (docs only, a single directory), gate it with a check that fails the run when violated — a prompt boundary alone can be broken silently.
+- **Transactional, idempotent state.** Advance the run marker (last-processed SHA) only on success; on failure leave it so the next run retries the same window. Never leave partial state.
+- **Bound self-correction.** Cap any review/fix loop (e.g. ≤3 turns) so a run can't thrash.
+- **Isolate edits.** Prefer a detached worktree over the live checkout, and clean up branches/worktrees the routine created.
+- **Pick a durable state store.** `memory: local` is per-machine — it won't survive across CI runners or a scheduler on another host. For scheduled/shared routines use a repo-tracked state file or `memory: project`.
+
+## Safe git writes
+
+Routines that commit should avoid lock-prone porcelain (`git add` / `commit` / `checkout -B`), which can leave stale `.lock` files, and must never run `git config user.*`. Instead build the commit with plumbing: stage into a temporary index (`GIT_INDEX_FILE`), `git write-tree`, then `git commit-tree` authored as the user, and move the ref or push the SHA. This keeps the working tree and index clean and the author identity stable across runs.
+
 ## Adding a plugin (checklist)
 
 1. `plugins/<name>/.claude-plugin/plugin.json` — `name`, `version`, `description`, `author`.

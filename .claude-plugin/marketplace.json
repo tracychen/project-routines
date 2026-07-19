@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "routines",
-      "description": "A suite of memory-backed engineering-routine agents — code-simplifier (@agent-routines:code-simplifier) for incremental code cleanup, and retro (@agent-routines:retro), which fans out to subagents for a weekly retrospective. Run on demand or on a schedule.",
+      "description": "A suite of memory-backed engineering-routine agents: code-simplifier (incremental code cleanup), retro (weekly retrospective, fans out to subagents), tech-debt-sweep (read-only debt report with trend tracking), and doc-sync (keeps docs in step with code). Run on demand or on a schedule.",
       "author": {
         "name": "Tracy Chen",
         "email": "hi@tracy.fyi"

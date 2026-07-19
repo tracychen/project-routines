@@ -17,7 +17,9 @@ project-routines/
 │       └── agents/
 │           ├── code-simplifier.md  # @agent-routines:code-simplifier (persistent memory)
 │           ├── retro.md            # @agent-routines:retro (memory; spawns subagents)
-│           └── retro-analyst.md    # read-only subagent the retro agent delegates to
+│           ├── retro-analyst.md    # read-only subagent the retro agent delegates to
+│           ├── tech-debt-sweep.md  # @agent-routines:tech-debt-sweep (memory; read-only)
+│           └── doc-sync.md         # @agent-routines:doc-sync (memory; docs-only edits)
 ├── docs/
 │   └── AUTHORING.md              # Conventions every routine follows
 └── README.md
@@ -31,6 +33,8 @@ The marketplace manifest references the plugin with a relative `source` path (`"
 | --- | --- | --- | --- | --- |
 | `code-simplifier` | agent | `@agent-routines:code-simplifier` | on demand · after edits · pre-commit / CI | Tightens recently modified code for clarity and maintainability while preserving behavior — removes AI slop and over-engineering, applies cosmetic fixes directly, flags structural refactors. Remembers the last commit it processed and runs incrementally on what changed since. |
 | `retro` | agent | `@agent-routines:retro` | weekly · scheduled | Weekly retrospective over shipping cadence, test health, and progress, ending in 1–3 concrete next-week improvements. Fans read-only gathering out to `retro-analyst` subagents and remembers prior retros to track trends. |
+| `tech-debt-sweep` | agent | `@agent-routines:tech-debt-sweep` | weekly · scheduled | Read-only sweep that surfaces and ranks tech debt — TODO/FIXME markers, complexity and churn hotspots, dead code, skipped tests — into a dated report. Remembers prior sweeps to show whether debt is growing or shrinking. |
+| `doc-sync` | agent | `@agent-routines:doc-sync` | after edits · pre-commit / CI | Reconciles documentation with the code that changed since it last ran, updating README, `docs/`, and API references. Edits docs only, never code. Incremental via memory. |
 
 ## Installation
 
