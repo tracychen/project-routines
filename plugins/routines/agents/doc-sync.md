@@ -40,17 +40,25 @@ If the project uses a docs framework, respect it. Where a gap is real, note whic
 
 ## Running unattended (scheduled or CI)
 
-When no human is present, tighten the contract — propose, don't dispose:
+When invoked non-interactively, follow a propose-don't-dispose flow. It's written to be portable — adapt the branch names, credentials, and any helper commands to the host repo. If a repo ships its own docs-sync runbook, follow that instead.
 
-- **Isolate** — make edits in a detached git worktree at the base branch, not the live working tree, so you never disturb in-progress work or hit lock contention.
-- **Propose, never merge** — never commit to or push a protected branch (`main`, `staging`, …). Open a documentation-only PR from a fresh `doc-sync/<date>` branch and hand off; a human merges it, not you.
-- **Guardrail (hard gate)** — before finalizing, run `git diff --name-only <base>` and confirm every changed path is documentation (`*.md`, `*.mdx`, `docs/…`, `README`, …) or a comment-only source edit. If anything else changed, stop and label the run `needs-manual-review` instead of opening a clean PR. Enforce the docs-only invariant in fact, not just intent.
-- **Bounded self-review** — delegate a review of your doc diff to a subagent, capped at 3 turns; apply its fixes in the worktree, then stop even if imperfect.
-- **Transactional state** — advance the last-synced marker only after the PR is open. On any error, stop, leave the marker where it was, and report — so the next run safely retries the same window.
-- **Hand off** — end with a notification on whatever channel is configured, plus a disposition label: `ready` (guardrail passed, review converged) or `needs-manual-review`.
-- **Clean up** — prune stale worktrees and delete already-merged `doc-sync/*` branches at the start of each run.
+1. **Scope.** Use the base commit the caller passes; if none, read the last-synced SHA from wherever this routine keeps state (a repo-tracked state file, or `memory`). Reconcile the docs for the code in `git diff <base>..<HEAD of the integration branch>`. Report the new HEAD back — don't advance the marker yourself; the caller records it once a PR is open.
+2. **Prepare (idempotent, self-cleaning).** Fetch the integration branch. Prune stale worktrees and delete already-merged `doc-sync/*` branches left by prior runs.
+3. **Edit in a detached worktree.** Create a detached worktree at the integration branch — never the live checkout, never a local or protected branch. Make minimal, faithful, documentation-only edits there and track the edited paths. If a stale lock blocks worktree creation, retry with a uniquely-suffixed path.
+4. **Self-review (≤3 turns).** Delegate the working doc diff to a subagent; apply its fixes in the worktree; stop when it approves or after 3 turns.
+5. **Guardrail (hard gate).** Confirm the diff touches only documentation (and comment-only source). If anything else changed, don't ship a clean PR — flag `needs-manual-review`. Prefer a real check — a script the repo provides, or `git diff --name-only <base>..<new>` matched against a docs allowlist — over trusting intent.
+6. **Commit + push safely.** Use plumbing, not lock-prone porcelain: stage into a temporary index (`GIT_INDEX_FILE`), `git write-tree`, `git commit-tree` authored as the repo's configured identity, then push the SHA straight to `refs/heads/doc-sync/<date>`. Never run `git add` / `commit` / `checkout -B` or `git config user.*`. No net change → report `no-drift` and stop.
+7. **Open the PR + label.** Open a non-draft PR from `doc-sync/<date>` against the integration branch; the body lists each doc touched and the code change that drove it. Label `ready` if the guardrail passed and review converged, else `needs-manual-review` (still open the PR).
+8. **Hand off, don't dispose.** Never merge, never advance the marker, and don't notify from inside the routine unless that's explicitly your job. Return a disposition the caller can act on:
 
-Run interactively (a human asked directly) and you may edit docs in place and report, skipping the worktree/PR machinery.
+   ```
+   { "outcome": "ready" | "needs-manual-review" | "no-drift",
+     "prUrl": "…", "newSha": "…", "docsUpdated": [ … ], "flagged": [ … ] }
+   ```
+
+**Invariants:** documentation only — never code logic, tests, or build config; minimal faithful edits; propose, never merge or push a protected branch; flag ambiguous intent rather than guessing.
+
+**Interactive use** (a human asked directly): skip the worktree/PR/plumbing machinery — edit docs in place and report.
 
 ## Output
 
