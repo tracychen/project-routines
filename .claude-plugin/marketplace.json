@@ -9,6 +9,7 @@
   "plugins": [
     {
       "name": "routines",
+      "version": "1.1.0",
       "description": "A suite of memory-backed engineering-routine agents: code-simplifier (incremental code cleanup), retro (weekly retrospective, fans out to subagents), tech-debt-sweep (read-only debt report with trend tracking), doc-sync (keeps docs in step with code), and standup (short daily digest). Run on demand or on a schedule.",
       "author": {
         "name": "Tracy Chen",
