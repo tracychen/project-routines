@@ -1,7 +1,7 @@
 {
   "name": "routines",
-  "version": "1.0.0",
-  "description": "A suite of engineering routines you run on demand or on a schedule — currently a code-simplification pass and a weekly retrospective",
+  "version": "1.1.0",
+  "description": "A suite of memory-backed engineering-routine agents — code-simplifier, retro (with its retro-analyst subagent), tech-debt-sweep, doc-sync, and standup — run on demand or on a schedule",
   "author": {
     "name": "Tracy Chen",
     "email": "hi@tracy.fyi"

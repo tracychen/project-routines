@@ -19,7 +19,8 @@ project-routines/
 │           ├── retro.md            # @agent-routines:retro (memory; spawns subagents)
 │           ├── retro-analyst.md    # read-only subagent the retro agent delegates to
 │           ├── tech-debt-sweep.md  # @agent-routines:tech-debt-sweep (memory; read-only)
-│           └── doc-sync.md         # @agent-routines:doc-sync (memory; docs-only edits)
+│           ├── doc-sync.md         # @agent-routines:doc-sync (memory; docs-only edits)
+│           └── standup.md          # @agent-routines:standup (memory; read-only daily digest)
 ├── docs/
 │   └── AUTHORING.md              # Conventions every routine follows
 └── README.md
@@ -35,6 +36,7 @@ The marketplace manifest references the plugin with a relative `source` path (`"
 | `retro` | agent | `@agent-routines:retro` | weekly · scheduled | Weekly retrospective: reviews last retro's action items, then reports shipped work, DORA + delivery-flow metrics, effort distribution, and test health, ending in 1–3 owned next-week improvements. Fans read-only gathering out to `retro-analyst` subagents; remembers prior retros to track trends. |
 | `tech-debt-sweep` | agent | `@agent-routines:tech-debt-sweep` | weekly · scheduled | Read-only sweep that surfaces and ranks tech debt — TODO/FIXME markers, complexity and churn hotspots, dead code, skipped tests — into a dated report. Remembers prior sweeps to show whether debt is growing or shrinking. |
 | `doc-sync` | agent | `@agent-routines:doc-sync` | after edits · pre-commit / CI | Reconciles documentation with the code that changed since it last ran, updating README, `docs/`, and API references. Edits docs only, never code. Incremental via memory. |
+| `standup` | agent | `@agent-routines:standup` | daily · scheduled | Short daily digest that reconciles commitments (last standup, meeting notes, chat) against what actually shipped — landed / slipped / dropped / unplanned — plus in-flight work and blockers. Read-only; consults whatever sources are connected and says what it couldn't see. |
 
 ## Installation
 

@@ -67,3 +67,4 @@ Routines that commit should avoid lock-prone porcelain (`git add` / `commit` / `
 3. Register it in `.claude-plugin/marketplace.json` with `"source": "./plugins/<name>"`.
 4. Add a row to the README table and document any trigger or schedule.
 5. Validate: the JSON parses, frontmatter carries `name` + `description`, and the `source` path resolves.
+6. **Bump the plugin's `version` on every change you want installers to receive.** It is the only update signal for a marketplace plugin — if the version doesn't change, Claude Code compares installed against published, sees no difference, and the Update button does nothing. Unbumped plugins silently stay stale.
